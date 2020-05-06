@@ -1,0 +1,50 @@
+plugins {
+    id 'org.springframework.boot' version '2.2.6.RELEASE'
+    id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+    id 'java'
+    id "application"
+    id 'com.google.cloud.tools.jib' version '2.1.0'
+}
+
+group 'org.demo.monitoring'
+version '1.0-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+    mavenCentral()
+}
+
+
+ext {
+    javaMainClass = "org.demo.monitoring.SpringMonitoringApplication"
+}
+
+application {
+    mainClassName = javaMainClass
+}
+jib {
+    container {
+        jvmFlags = ['-XX:+UseSerialGC', '-XX:+UseStringDeduplication','-noverify', '-XX:TieredStopAtLevel=1', '-XX:+AlwaysPreTouch']
+    }
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+    }
+    implementation 'io.opencensus:opencensus-api:0.26.0'
+    implementation 'io.opencensus:opencensus-impl:0.26.0'
+    implementation 'io.opencensus:opencensus-exporter-stats-prometheus:0.26.0'
+    implementation 'io.opencensus:opencensus-exporter-stats-stackdriver:0.26.0'
+
+    implementation 'io.prometheus:simpleclient_httpserver:0.4.0'
+
+    implementation 'io.opencensus:opencensus-contrib-http-servlet:0.26.0'
+    implementation 'io.opencensus:opencensus-contrib-http-util:0.26.0'
+    implementation 'org.springframework.cloud:spring-cloud-gcp-starter-logging:1.2.1.RELEASE'
+}
+
+test {
+    useJUnitPlatform()
+}

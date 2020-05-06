@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This config formats the log with the correct severity level-->
+<!-- However any JSON that is logged appears as a string in the message field of the jsonPayload, so are not really searchable-->
+<!--<configuration>-->
+<!--    <property name="projectId" value="${PROJECT_ID:-phoenix-sandbox-one}"/>-->
+<!--    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">-->
+<!--        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">-->
+<!--            <layout class="org.springframework.cloud.gcp.logging.StackdriverJsonLayout">-->
+<!--                <projectId>${projectId}</projectId>-->
+<!--                &lt;!&ndash; default is set tot true for the following field, included for visibility&ndash;&gt;-->
+<!--                <includeLevel>true</includeLevel>-->
+<!--                <includeThreadName>true</includeThreadName>-->
+<!--                <includeMDC>true</includeMDC>-->
+<!--                <includeLoggerName>true</includeLoggerName>-->
+<!--                <includeFormattedMessage>true</includeFormattedMessage>-->
+<!--                <includeExceptionInMessage>true</includeExceptionInMessage>-->
+<!--                <includeContextName>true</includeContextName>-->
+<!--            </layout>-->
+<!--        </encoder>-->
+<!--    </appender>-->
+
+<!--    <root level="INFO">-->
+<!--        <appender-ref ref="CONSOLE_JSON" />-->
+<!--    </root>-->
+<!--</configuration>-->
+
+<!--This config formats JSON objects into genuine jsonPayload log entries allowing for searchable fields-->
+<!-- However the log severity level does not appear correctly, being rendered as 'Any log level'-->
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>=[%d{ISO8601}] spring-monitoring %highlight(%-5level) [%thread] %cyan(%logger{15}) - %msg %mdc{} %n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
